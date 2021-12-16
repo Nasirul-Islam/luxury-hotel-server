@@ -18,6 +18,7 @@ async function run() {
         const database = client.db("luxuryHotel");
         const roomsCollection = database.collection("rooms");
         const reviewCollection = database.collection("review");
+        const bookingCollection = database.collection("booking");
         const resturentCollection = database.collection("resturent");
         // rooms api
         app.post('/rooms', async (req, res) => {
@@ -39,6 +40,16 @@ async function run() {
             const result = await reviewCollection.find({}).toArray();
             res.json(result);
         });
+        // booking api
+        app.post('/booking', async (req, res) => {
+            const book = req.body;
+            const result = await bookingCollection.insertOne(book);
+            res.json(result);
+        });
+        app.get('/booking', async (req, res) => {
+            const result = await bookingCollection.find({}).toArray();
+            res.json(result);
+        })
         // resturent api
         app.post('/resturent', async (req, res) => {
             const resturent = req.body;
