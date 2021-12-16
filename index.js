@@ -17,15 +17,36 @@ async function run() {
         console.log('database connect successfully');
         const database = client.db("luxuryHotel");
         const roomsCollection = database.collection("rooms");
-
+        const reviewCollection = database.collection("review");
+        const resturentCollection = database.collection("resturent");
+        // rooms api
         app.post('/rooms', async (req, res) => {
             const room = req.body;
-            console.log(room);
             const result = await roomsCollection.insertOne(room);
             res.json(result);
         });
         app.get('/rooms', async (req, res) => {
             const result = await roomsCollection.find({}).toArray();
+            res.json(result);
+        });
+        // review api
+        app.post('/review', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            res.json(result);
+        });
+        app.get('/review', async (req, res) => {
+            const result = await reviewCollection.find({}).toArray();
+            res.json(result);
+        });
+        // resturent api
+        app.post('/resturent', async (req, res) => {
+            const resturent = req.body;
+            const result = await resturentCollection.insertOne(resturent);
+            res.json(result);
+        });
+        app.get('/resturent', async (req, res) => {
+            const result = await resturentCollection.find({}).toArray();
             res.json(result);
         });
     }
