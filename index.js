@@ -49,6 +49,12 @@ async function run() {
         app.get('/booking', async (req, res) => {
             const result = await bookingCollection.find({}).toArray();
             res.json(result);
+        });
+        app.get('/userbooking', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = await bookingCollection.find(query).toArray();
+            res.json(result);
         })
         // resturent api
         app.post('/resturent', async (req, res) => {
