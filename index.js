@@ -19,6 +19,7 @@ async function run() {
         const roomsCollection = database.collection("rooms");
         const reviewCollection = database.collection("review");
         const bookingCollection = database.collection("booking");
+        const usersCollection = database.collection("users");
         const resturentCollection = database.collection("resturent");
         // rooms api
         app.post('/rooms', async (req, res) => {
@@ -55,6 +56,37 @@ async function run() {
             const query = { email: email };
             const result = await bookingCollection.find(query).toArray();
             res.json(result);
+        });
+        // users api
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.json(result);
+        });
+        app.put('/user', async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const options = { upsert: true };
+            const updateDoc = { $set: user };
+            const result = await usersCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        });
+        app.put('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const updateDoc = { $set: { role: 'admin' } };
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        });
+        app.get('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const user = await usersCollection.findOne(query);
+            let isadmin = false;
+            if (user?.role === 'admin') {
+                isadmin = true;
+            }
+            res.json({ admin: isadmin });
         })
         // resturent api
         app.post('/resturent', async (req, res) => {
