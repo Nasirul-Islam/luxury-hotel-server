@@ -102,7 +102,7 @@ async function run() {
             }
             res.json({ admin: isadmin });
         })
-        // resturent api
+        // resturent api 
         app.post('/resturent', async (req, res) => {
             const resturent = req.body;
             const result = await resturentCollection.insertOne(resturent);
